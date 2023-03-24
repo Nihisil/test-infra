@@ -12,7 +12,7 @@ terraform {
 }
 
 module "vpc" {
-  source    = "./modules/vpc"
+  source = "./modules/vpc"
 
   namespace = var.namespace
 }
@@ -37,21 +37,21 @@ module "cloudwatch" {
 module "s3" {
   source = "./modules/s3"
 
-  namespace   = var.namespace
+  namespace = var.namespace
 }
 
 module "alb" {
-    source = "./modules/alb"
+  source = "./modules/alb"
 
-    vpc_id             = module.vpc.vpc_id
-    namespace          = var.namespace
-    app_port           = var.app_port
-    subnet_ids         = module.vpc.public_subnet_ids
-    security_group_ids = module.security_group.alb_security_group_ids
-    health_check_path  = var.health_check_path
-    enable_stickiness  = var.enable_alb_stickiness
-    stickiness_type    = var.alb_stickiness_type
-  }
+  vpc_id             = module.vpc.vpc_id
+  namespace          = var.namespace
+  app_port           = var.app_port
+  subnet_ids         = module.vpc.public_subnet_ids
+  security_group_ids = module.security_group.alb_security_group_ids
+  health_check_path  = var.health_check_path
+  enable_stickiness  = var.enable_alb_stickiness
+  stickiness_type    = var.alb_stickiness_type
+}
 
 
 
@@ -95,7 +95,7 @@ module "ssm" {
   namespace = var.namespace
 
   secrets = {
-    database_url = "postgres://${var.rds_username}:${var.rds_password}@${module.rds.db_endpoint}/${var.rds_database_name}"
+    database_url    = "postgres://${var.rds_username}:${var.rds_password}@${module.rds.db_endpoint}/${var.rds_database_name}"
     secret_key_base = var.secret_key_base
   }
 }
