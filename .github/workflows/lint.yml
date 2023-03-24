@@ -15,10 +15,10 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
+      # - name: Cancel previous runs
+      #   uses: styfle/cancel-workflow-action@0.11.0
+      #   with:
+      #     access_token: ${{ github.token }}
 
       - name: Checkout the repository
         uses: actions/checkout@v3
