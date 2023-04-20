@@ -9,6 +9,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
+# tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group_rule" "alb_ingress_https" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
@@ -16,8 +17,10 @@ resource "aws_security_group_rule" "alb_ingress_https" {
   from_port         = 443
   to_port           = 443
   cidr_blocks       = ["0.0.0.0/0"]
+  description       = "From HTTPS to ALB"
 }
 
+# tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group_rule" "alb_ingress_http" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
@@ -25,8 +28,10 @@ resource "aws_security_group_rule" "alb_ingress_http" {
   from_port         = 80
   to_port           = 80
   cidr_blocks       = ["0.0.0.0/0"]
+  description       = "From HTTP to ALB"
 }
 
+# tfsec:ignore:aws-ec2-no-public-egress-sgr
 resource "aws_security_group_rule" "alb_egress" {
   type              = "egress"
   security_group_id = aws_security_group.alb.id
@@ -34,6 +39,7 @@ resource "aws_security_group_rule" "alb_egress" {
   from_port         = var.app_port
   to_port           = var.app_port
   cidr_blocks       = ["0.0.0.0/0"]
+  description       = "From ALB to Apps"
 }
 
 // RDS
@@ -54,6 +60,7 @@ resource "aws_security_group_rule" "rds_ingress_app_fargate" {
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.ecs_fargate.id
+  description              = "From RDS to App"
 }
 
 resource "aws_security_group_rule" "rds_ingress_bastion" {
@@ -63,6 +70,7 @@ resource "aws_security_group_rule" "rds_ingress_bastion" {
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.bastion.id
+  description              = "From Bastion to RDS"
 }
 
 // ECS
@@ -83,6 +91,7 @@ resource "aws_security_group_rule" "ecs_fargate_ingress_alb" {
   from_port                = var.app_port
   to_port                  = var.app_port
   source_security_group_id = aws_security_group.alb.id
+  description              = "From ALB to app"
 }
 
 resource "aws_security_group_rule" "ecs_fargate_ingress_private" {
@@ -92,8 +101,10 @@ resource "aws_security_group_rule" "ecs_fargate_ingress_private" {
   from_port         = 0
   to_port           = 65535
   cidr_blocks       = var.private_subnets_cidr_blocks
+  description       = "From internal VPC to app"
 }
 
+# tfsec:ignore:aws-ec2-no-public-egress-sgr
 resource "aws_security_group_rule" "ecs_fargate_egress_anywhere" {
   type              = "egress"
   security_group_id = aws_security_group.ecs_fargate.id
@@ -101,12 +112,14 @@ resource "aws_security_group_rule" "ecs_fargate_egress_anywhere" {
   from_port         = 0
   to_port           = 0
   cidr_blocks       = ["0.0.0.0/0"]
+  description       = "From app to everywhere"
 }
 
 // Bastion Host
 resource "aws_security_group" "bastion" {
-  name   = "${var.namespace}-bastion"
-  vpc_id = var.vpc_id
+  name        = "${var.namespace}-bastion"
+  description = "Bastion Security Group"
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "${var.namespace}-bastion-sg"
@@ -130,4 +143,5 @@ resource "aws_security_group_rule" "bastion_egress_rds" {
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.rds.id
+  description              = "Bastion egress RDS"
 }

@@ -12,13 +12,13 @@ terraform {
 }
 
 module "vpc" {
-  source = "./modules/vpc"
+  source = "../modules/vpc"
 
   namespace = var.namespace
 }
 
 module "security_group" {
-  source = "./modules/security_group"
+  source = "../modules/security_group"
 
   namespace                   = var.namespace
   vpc_id                      = module.vpc.vpc_id
@@ -29,19 +29,19 @@ module "security_group" {
 }
 
 module "cloudwatch" {
-  source = "./modules/cloudwatch"
+  source = "../modules/cloudwatch"
 
   namespace = var.namespace
 }
 
 module "s3" {
-  source = "./modules/s3"
+  source = "../modules/s3"
 
   namespace = var.namespace
 }
 
 module "alb" {
-  source = "./modules/alb"
+  source = "../modules/alb"
 
   vpc_id             = module.vpc.vpc_id
   namespace          = var.namespace
@@ -56,7 +56,7 @@ module "alb" {
 
 
 module "rds" {
-  source = "./modules/rds"
+  source = "../modules/rds"
 
   namespace = var.namespace
 
@@ -75,7 +75,7 @@ module "rds" {
 }
 
 module "bastion" {
-  source = "./modules/bastion"
+  source = "../modules/bastion"
 
   subnet_ids                  = module.vpc.public_subnet_ids
   instance_security_group_ids = module.security_group.bastion_security_group_ids
@@ -90,7 +90,7 @@ module "bastion" {
 }
 
 module "ssm" {
-  source = "./modules/ssm"
+  source = "../modules/ssm"
 
   namespace = var.namespace
 
@@ -101,7 +101,7 @@ module "ssm" {
 }
 
 module "ecs" {
-  source = "./modules/ecs"
+  source = "../modules/ecs"
 
   subnets                            = module.vpc.private_subnet_ids
   namespace                          = var.namespace

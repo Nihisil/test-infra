@@ -12,7 +12,7 @@ terraform {
 }
 
 module "ecr" {
-  source = "./modules/ecr"
+  source = "../modules/ecr"
 
   namespace   = var.namespace
   image_limit = var.image_limit
