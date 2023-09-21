@@ -28,29 +28,30 @@ variable "nimble_office_ip" {
   description = "Nimble Office IP"
 }
 
-variable "health_check_path" {
-  description = "Application health check path"
-  type        = string
+variable "bastion_image_id" {
+  description = "The AMI image ID for the bastion instance"
+  default     = "ami-0801a1e12f4a9ccc0"
 }
 
-variable "domain" {
-  description = "Application domain"
-  type        = string
+variable "bastion_instance_type" {
+  description = "The bastion instance type"
+  default     = "t3.nano"
 }
 
-variable "enable_alb_stickiness" {
-  description = "Enable sticky sessions for ALB"
-  type        = bool
-  default     = false
+variable "bastion_instance_desired_count" {
+  description = "The desired number of the bastion instance"
+  default     = 1
 }
 
-variable "alb_stickiness_type" {
-  description = "ALB stickiness type"
-  type        = string
-  default     = "lb_cookie"
+variable "bastion_max_instance_count" {
+  description = "The maximum number of the instance"
+  default     = 1
 }
 
-
+variable "bastion_min_instance_count" {
+  description = "The minimum number of the instance"
+  default     = 1
+}
 
 variable "rds_instance_type" {
   description = "The RDB instance type"
@@ -82,36 +83,6 @@ variable "rds_autoscaling_max_capacity" {
   type        = number
 }
 
-variable "bastion_image_id" {
-  description = "The AMI image ID for the bastion instance"
-  default     = "ami-0801a1e12f4a9ccc0"
-}
-
-variable "bastion_instance_type" {
-  description = "The bastion instance type"
-  default     = "t3.nano"
-}
-
-variable "bastion_instance_desired_count" {
-  description = "The desired number of the bastion instance"
-  default     = 1
-}
-
-variable "bastion_max_instance_count" {
-  description = "The maximum number of the instance"
-  default     = 1
-}
-
-variable "bastion_min_instance_count" {
-  description = "The minimum number of the instance"
-  default     = 1
-}
-
-variable "secret_key_base" {
-  description = "The Secret key base for the application"
-  type        = string
-}
-
 variable "ecr_repo_name" {
   description = "ECR repo name"
   type        = string
@@ -122,7 +93,7 @@ variable "ecr_tag" {
   type        = string
 }
 
-variable "ecs" {
+variable "ecs_config" {
   description = "ECS input variables"
   type = object({
     task_cpu                           = number
@@ -131,6 +102,12 @@ variable "ecs" {
     task_container_memory              = number
     deployment_maximum_percent         = number
     deployment_minimum_healthy_percent = number
+
+    # Auto-scaling
+    min_instance_count                   = number
+    max_instance_count                   = number
+    autoscaling_target_cpu_percentage    = number
+    autoscaling_target_memory_percentage = number
   })
 }
 
@@ -162,4 +139,24 @@ variable "environment_variables" {
       value = "80"
     },
   ]
+}
+
+variable "health_check_path" {
+  description = "Application health check path"
+  type        = string
+}
+
+variable "domain" {
+  description = "Application domain"
+  type        = string
+}
+
+variable "cloudwatch_log_retention_in_days" {
+  description = "How long (days) to retain the cloudwatch log data"
+  default     = 365
+}
+
+variable "secret_key_base" {
+  description = "The Secret key base for the application"
+  type        = string
 }

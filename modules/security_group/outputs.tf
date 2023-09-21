@@ -1,7 +1,4 @@
-output "alb_security_group_ids" {
-  description = "Security group IDs for ALB"
-  value       = [aws_security_group.alb.id]
-}
+// Outputs for security_group module
 
 output "bastion_security_group_ids" {
   description = "Security group IDs for Bastion"
@@ -16,4 +13,9 @@ output "rds_security_group_ids" {
 output "ecs_security_group_ids" {
   description = "Security group IDs for ECS Fargate"
   value       = [aws_security_group.ecs_fargate.id]
+}
+
+output "alb_security_group_ids" {
+  description = "Security group IDs for ALB"
+  value       = [aws_security_group.alb.id]
 }
