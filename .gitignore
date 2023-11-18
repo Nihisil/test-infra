@@ -33,4 +33,12 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# IDEA
 .idea
+*.iml
+
+# Vscode
+.vscode
+
+# Emacs
+.dir-locals.el

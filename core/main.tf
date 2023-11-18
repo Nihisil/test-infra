@@ -2,23 +2,27 @@ terraform {
   cloud {
     organization = "nimble"
     workspaces {
-      name = "test-tfsec"
+      name = "test-infra"
     }
   }
   # Terraform version
   required_version = "1.5.5"
 }
 
+locals {
+  env_namespace = "test-infra-${var.environment}"
+}
+
 module "vpc" {
   source = "../modules/vpc"
 
-  namespace = var.namespace
+  env_namespace = local.env_namespace
 }
 
 module "security_group" {
   source = "../modules/security_group"
 
-  namespace                   = var.namespace
+  env_namespace               = local.env_namespace
   vpc_id                      = module.vpc.vpc_id
   app_port                    = var.app_port
   private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
@@ -32,7 +36,7 @@ module "bastion" {
   subnet_ids                  = module.vpc.public_subnet_ids
   instance_security_group_ids = module.security_group.bastion_security_group_ids
 
-  namespace     = var.namespace
+  env_namespace = local.env_namespace
   image_id      = var.bastion_image_id
   instance_type = var.bastion_instance_type
 
@@ -44,7 +48,7 @@ module "bastion" {
 module "rds" {
   source = "../modules/rds"
 
-  namespace = var.namespace
+  env_namespace = local.env_namespace
 
   vpc_security_group_ids = module.security_group.rds_security_group_ids
   vpc_id                 = module.vpc.vpc_id
@@ -64,7 +68,7 @@ module "ecs" {
   source = "../modules/ecs"
 
   subnets                            = module.vpc.private_subnet_ids
-  namespace                          = var.namespace
+  env_namespace                      = local.env_namespace
   region                             = var.region
   app_host                           = module.alb.alb_dns_name
   app_port                           = var.app_port
@@ -95,7 +99,7 @@ module "alb" {
   source = "../modules/alb"
 
   vpc_id             = module.vpc.vpc_id
-  namespace          = var.namespace
+  env_namespace      = local.env_namespace
   app_port           = var.app_port
   subnet_ids         = module.vpc.public_subnet_ids
   security_group_ids = module.security_group.alb_security_group_ids
@@ -105,7 +109,7 @@ module "alb" {
 module "cloudwatch" {
   source = "../modules/cloudwatch"
 
-  namespace = var.namespace
+  env_namespace = local.env_namespace
 
   log_retention_in_days = var.cloudwatch_log_retention_in_days
 }
@@ -113,13 +117,13 @@ module "cloudwatch" {
 module "s3" {
   source = "../modules/s3"
 
-  namespace = var.namespace
+  env_namespace = local.env_namespace
 }
 
 module "ssm" {
   source = "../modules/ssm"
 
-  namespace = var.namespace
+  env_namespace = local.env_namespace
 
   secrets = {
     database_url    = "postgres://${var.rds_username}:${var.rds_password}@${module.rds.db_endpoint}/${var.rds_database_name}"

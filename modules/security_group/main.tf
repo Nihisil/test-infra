@@ -1,12 +1,12 @@
 // All security groups
 
 resource "aws_security_group" "bastion" {
-  name        = "${var.namespace}-bastion"
+  name        = "${var.env_namespace}-bastion"
   description = "Bastion Security Group"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "${var.namespace}-bastion-sg"
+    Name = "${var.env_namespace}-bastion-sg"
   }
 }
 
@@ -31,12 +31,12 @@ resource "aws_security_group_rule" "bastion_egress_rds" {
 }
 
 resource "aws_security_group" "rds" {
-  name        = "${var.namespace}-rds"
+  name        = "${var.env_namespace}-rds"
   description = "RDS Security Group"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "${var.namespace}-rds-sg"
+    Name = "${var.env_namespace}-rds-sg"
   }
 }
 
@@ -61,12 +61,12 @@ resource "aws_security_group_rule" "rds_ingress_bastion" {
 }
 
 resource "aws_security_group" "ecs_fargate" {
-  name        = "${var.namespace}-ecs-fargate-sg"
+  name        = "${var.env_namespace}-ecs-fargate-sg"
   description = "ECS Fargate Security Group"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "${var.namespace}-ecs-fargate-sg"
+    Name = "${var.env_namespace}-ecs-fargate-sg"
   }
 }
 
@@ -102,12 +102,12 @@ resource "aws_security_group_rule" "ecs_fargate_egress_anywhere" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "${var.namespace}-alb-sg"
+  name        = "${var.env_namespace}-alb-sg"
   description = "ALB Security Group"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "${var.namespace}-alb-sg"
+    Name = "${var.env_namespace}-alb-sg"
   }
 }
 

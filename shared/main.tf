@@ -2,11 +2,15 @@ terraform {
   cloud {
     organization = "nimble"
     workspaces {
-      name = "test-tfsec-shared"
+      name = "test-infra-shared"
     }
   }
   # Terraform version
   required_version = "1.5.5"
+}
+
+locals {
+  env_namespace = "test-infra-${var.environment}"
 }
 
 module "iam_groups" {
@@ -58,6 +62,6 @@ module "iam_developer_group_membership" {
 module "ecr" {
   source = "../modules/ecr"
 
-  namespace   = var.namespace
-  image_limit = var.image_limit
+  env_namespace = local.env_namespace
+  image_limit   = var.image_limit
 }
