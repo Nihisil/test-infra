@@ -1,6 +1,6 @@
 terraform {
   cloud {
-    organization = "nimble"
+    organization = "alex-personal-terraform"
     workspaces {
       name = "test-infra-shared"
     }
@@ -58,10 +58,10 @@ module "iam_developer_group_membership" {
   group = module.iam_groups.developer_group
   users = var.iam_developer_emails
 }
-
-module "ecr" {
-  source = "../modules/ecr"
-
-  env_namespace = local.env_namespace
-  image_limit   = var.image_limit
-}
+#
+#module "ecr" {
+#  source = "../modules/ecr"
+#
+#  env_namespace = local.env_namespace
+#  image_limit   = var.image_limit
+#}

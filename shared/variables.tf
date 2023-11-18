@@ -29,7 +29,7 @@ variable "iam_developer_emails" {
   type        = list(string)
 }
 
-variable "image_limit" {
-  description = "Sets max amount of the latest develop images to be kept"
-  type        = number
-}
+#variable "image_limit" {
+#  description = "Sets max amount of the latest develop images to be kept"
+#  type        = number
+#}
