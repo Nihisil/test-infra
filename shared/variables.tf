@@ -19,8 +19,8 @@ variable "iam_admin_emails" {
   type        = list(string)
 }
 
-variable "iam_bot_emails" {
-  description = "List of bot emails to provision IAM user account"
+variable "iam_infra_service_account_emails" {
+  description = "List of service account emails to provision IAM user account"
   type        = list(string)
 }
 

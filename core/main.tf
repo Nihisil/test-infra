@@ -1,6 +1,6 @@
 terraform {
   cloud {
-    organization = "nimble"
+    organization = "alex-personal-terraform"
     workspaces {
       name = "test-infra"
     }

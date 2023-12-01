@@ -29,34 +29,32 @@ module "iam_developer_users" {
   usernames = var.iam_developer_emails
 }
 
-module "iam_bot_users" {
+module "iam_infra_service_account_users" {
   source = "../modules/iam_users"
 
-  usernames = var.iam_bot_emails
+  usernames = var.iam_infra_service_account_emails
+  has_login = false
 }
 
-module "iam_admin_group_membership" {
+module "iam_group_membership" {
   source = "../modules/iam_group_membership"
 
-  name  = "admin-group-membership"
-  group = module.iam_groups.admin_group
-  users = var.iam_admin_emails
-}
+  for_each = {
+    admin                 = { group = module.iam_groups.admin_group, users = var.iam_admin_emails },
+    infra_service_account = { group = module.iam_groups.infra_service_account_group, users = var.iam_infra_service_account_emails },
+    developer             = { group = module.iam_groups.developer_group, users = var.iam_developer_emails }
+  }
 
-module "iam_bot_group_membership" {
-  source = "../modules/iam_group_membership"
+  name  = "${each.key}-group-membership"
+  group = each.value.group
+  users = each.value.users
 
-  name  = "bot-group-membership"
-  group = module.iam_groups.bot_group
-  users = var.iam_bot_emails
-}
-
-module "iam_developer_group_membership" {
-  source = "../modules/iam_group_membership"
-
-  name  = "developer-group-membership"
-  group = module.iam_groups.developer_group
-  users = var.iam_developer_emails
+  depends_on = [
+    module.iam_groups,
+    module.iam_admin_users,
+    module.iam_developer_users,
+    module.iam_infra_service_account_users,
+  ]
 }
 #
 #module "ecr" {
