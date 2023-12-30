@@ -56,10 +56,10 @@ module "iam_group_membership" {
     module.iam_infra_service_account_users,
   ]
 }
-#
-#module "ecr" {
-#  source = "../modules/ecr"
-#
-#  env_namespace = local.env_namespace
-#  image_limit   = var.image_limit
-#}
+
+module "ecr" {
+  source = "../modules/ecr"
+
+  env_namespace = local.env_namespace
+  image_limit   = var.image_limit
+}

@@ -17,6 +17,7 @@ module "vpc" {
   source = "../modules/vpc"
 
   env_namespace = local.env_namespace
+  region        = var.region
 }
 
 module "security_group" {

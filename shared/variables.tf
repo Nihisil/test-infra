@@ -20,7 +20,7 @@ variable "iam_admin_emails" {
 }
 
 variable "iam_infra_service_account_emails" {
-  description = "List of service account emails to provision IAM user account"
+  description = "List of infra service account emails to provision IAM user account"
   type        = list(string)
 }
 
@@ -29,7 +29,7 @@ variable "iam_developer_emails" {
   type        = list(string)
 }
 
-#variable "image_limit" {
-#  description = "Sets max amount of the latest develop images to be kept"
-#  type        = number
-#}
+variable "image_limit" {
+  description = "Sets max amount of the latest develop images to be kept"
+  type        = number
+}
