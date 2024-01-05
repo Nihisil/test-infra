@@ -132,11 +132,11 @@ module "cloudwatch" {
   log_retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
-#module "s3" {
-#  source = "../modules/s3"
-#
-#  env_namespace = local.env_namespace
-#}
+module "s3" {
+  source = "../modules/s3"
+
+  env_namespace = local.env_namespace
+}
 
 module "ssm" {
   for_each = local.apps
