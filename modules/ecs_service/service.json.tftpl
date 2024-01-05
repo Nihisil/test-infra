@@ -1,10 +1,8 @@
 [
   {
-    "name": "${env_namespace}",
+    "name": "${container_name}",
     "image": "${aws_ecr_repository}:${aws_ecr_tag}",
     "essential": true,
-    "memory": ${memory},
-    "cpu": ${cpu},
     "portMappings": [
       {
         "containerPort": ${app_port},
@@ -16,7 +14,7 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${env_namespace}-service-web",
+        "awslogs-stream-prefix": "${container_name}-service",
         "awslogs-group": "${aws_cloudwatch_log_group_name}"
       }
     },

@@ -23,6 +23,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "app_name" {
+  description = "App name"
+  type        = string
+}
+
 variable "app_port" {
   description = "Application running port"
   type        = number

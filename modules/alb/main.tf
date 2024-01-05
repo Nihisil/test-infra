@@ -4,7 +4,7 @@ locals {
 
 # tfsec:ignore:aws-elb-alb-not-public
 resource "aws_lb" "main" {
-  name               = "${var.env_namespace}-alb"
+  name               = "${var.env_namespace}-${var.app_name}-alb"
   internal           = false
   subnets            = var.subnet_ids
   load_balancer_type = "application"
@@ -20,7 +20,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "target_group" {
-  name                 = "${var.env_namespace}-alb-tg"
+  name                 = "${var.env_namespace}-${var.app_name}-tg"
   port                 = var.app_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -29,10 +29,10 @@ resource "aws_lb_target_group" "target_group" {
 
   health_check {
     healthy_threshold   = 3
-    interval            = 5
+    interval            = 15
     protocol            = "HTTP"
     matcher             = "200-299"
-    timeout             = 3
+    timeout             = 10
     path                = var.health_check_path
     port                = var.app_port
     unhealthy_threshold = 2
@@ -48,6 +48,7 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
+# there is no HTTPS listener as SSL termination will be handled by Cloudflare
 # tfsec:ignore:aws-elb-http-not-used
 resource "aws_lb_listener" "app_http" {
   load_balancer_arn = aws_lb.main.arn

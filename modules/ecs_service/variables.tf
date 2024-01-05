@@ -3,13 +3,23 @@ variable "env_namespace" {
   type        = string
 }
 
+variable "app_name" {
+  description = "App name"
+  type        = string
+}
+
 variable "region" {
   description = "AWS region"
   type        = string
 }
 
-variable "app_host" {
-  description = "Application host name"
+variable "ecs_cluster_id" {
+  description = "The ID of the ECS cluster"
+  type        = string
+}
+
+variable "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
   type        = string
 }
 
@@ -64,11 +74,6 @@ variable "deployment_minimum_healthy_percent" {
 
 variable "desired_count" {
   description = "ECS task definition instance number"
-  type        = number
-}
-
-variable "container_memory" {
-  description = "ECS task container memory, e.g. 900"
   type        = number
 }
 

@@ -1,9 +1,18 @@
+# Append a random string to the secret names because once we tear down the infra, the secret does not actually
+# get deleted right away, which means that if we try to recreate the infra, it'll fail as the
+# secret name already exists.
+resource "random_string" "service_secret_random_suffix" {
+  length  = 6
+  special = false
+}
+
 resource "aws_ssm_parameter" "secret_parameters" {
   for_each = var.secrets
 
-  name  = "/${var.env_namespace}/${each.key}"
-  type  = "String"
-  value = each.value
+  name        = "/${var.env_namespace}/${var.app_name}/${each.key}-${random_string.service_secret_random_suffix.result}"
+  description = "Secret '${lower(each.key)}' for ${var.env_namespace}"
+  type        = "String"
+  value       = each.value
 }
 
 locals {
