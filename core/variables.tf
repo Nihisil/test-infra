@@ -141,17 +141,12 @@ variable "health_check_path" {
   type        = string
 }
 
-variable "domain" {
-  description = "Application domain"
-  type        = string
-}
-
 variable "cloudwatch_log_retention_in_days" {
   description = "How long (days) to retain the cloudwatch log data"
   default     = 365
 }
-
-variable "secret_key_base" {
-  description = "The Secret key base for the application"
-  type        = string
-}
+#
+#variable "secret_key_base" {
+#  description = "The Secret key base for the application"
+#  type        = string
+#}
