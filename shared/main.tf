@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "alex-personal-terraform"
     workspaces {
-      name = "test-infra-shared"
+      name = "tf-template-test-shared"
     }
   }
   # Terraform version
@@ -10,11 +10,14 @@ terraform {
 }
 
 locals {
-  env_namespace = "test-infra-${var.environment}"
+  project_name  = "tf-template-test"
+  env_namespace = "${local.project_name}-${var.environment}"
 }
 
 module "iam_groups" {
   source = "../modules/iam_groups"
+
+  project_name = local.project_name
 }
 
 module "iam_admin_users" {

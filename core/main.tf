@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "alex-personal-terraform"
     workspaces {
-      name = "test-infra"
+      name = "tf-template-test"
     }
   }
   # Terraform version
@@ -10,7 +10,8 @@ terraform {
 }
 
 locals {
-  env_namespace = "test-infra-${var.environment}"
+  project_name  = "tf-template-test"
+  env_namespace = "${local.project_name}-${var.environment}"
 }
 
 module "vpc" {
