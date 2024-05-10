@@ -90,7 +90,7 @@ resource "aws_security_group_rule" "ecs_fargate_ingress_private" {
   description       = "From internal VPC to app"
 }
 
-# tfsec:ignore:aws-ec2-no-public-egress-sgr
+# trivy:ignore:AVD-AWS-0104
 resource "aws_security_group_rule" "ecs_fargate_egress_anywhere" {
   type              = "egress"
   security_group_id = aws_security_group.ecs_fargate.id
@@ -111,7 +111,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# tfsec:ignore:aws-ec2-no-public-ingress-sgr
+# trivy:ignore:AVD-AWS-0107
 resource "aws_security_group_rule" "alb_ingress_https" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
@@ -122,7 +122,7 @@ resource "aws_security_group_rule" "alb_ingress_https" {
   description       = "From HTTPS to ALB"
 }
 
-# tfsec:ignore:aws-ec2-no-public-ingress-sgr
+# trivy:ignore:AVD-AWS-0107
 resource "aws_security_group_rule" "alb_ingress_http" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
@@ -133,7 +133,7 @@ resource "aws_security_group_rule" "alb_ingress_http" {
   description       = "From HTTP to ALB"
 }
 
-# tfsec:ignore:aws-ec2-no-public-egress-sgr
+# trivy:ignore:AVD-AWS-0104
 resource "aws_security_group_rule" "alb_egress" {
   type              = "egress"
   security_group_id = aws_security_group.alb.id
