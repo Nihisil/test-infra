@@ -29,6 +29,7 @@ resource "aws_vpc_endpoint" "logs" {
   vpc_id          = module.vpc.vpc_id
   service_name    = "com.amazonaws.${var.region}.logs"
   route_table_ids = data.aws_route_tables.private_route_table.ids
+  vpc_endpoint_type  = "Interface"
 
   tags = {
     Name = "${var.env_namespace}-vpc-endpoint-logs"
